@@ -1,10 +1,14 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:myproject/utilities';
+import 'buttons.dart';
 
 class mainpage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final uid = ModalRoute.of(context)!.settings.arguments as String;
+
     var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(
@@ -31,7 +35,8 @@ class mainpage extends StatelessWidget {
                       icon: Icon(Icons.settings),
                       iconSize: 45,
                       onPressed: () {
-                        print('settings pressed');
+                        Navigator.pushNamed(context, '/profile',
+                            arguments: uid);
                       },
                     ),
                   ),
@@ -172,6 +177,18 @@ class mainpage extends StatelessWidget {
                             ),
                             //---------------------------------------//
                             //------------------------------//
+                          ),
+                        ),
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          alignment: FractionalOffset.topCenter,
+                          child: TextButton(
+                            child: Text('Burned Calories',
+                                style: TextStyle(color: Colors.black)),
+                            // ignore: avoid_print
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/LineChartSample2');
+                            },
                           ),
                         ),
                       ],

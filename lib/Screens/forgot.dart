@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class forgot2 extends StatelessWidget {
+class forgot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +21,10 @@ class forgot2 extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Forgot Password\nCreate New Password",
+                    "Forgot Password",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 30,
+                      fontSize: 35,
                     ),
                   ),
                 ],
@@ -56,7 +56,7 @@ class forgot2 extends StatelessWidget {
                               ]),
                           child: TextField(
                             decoration: InputDecoration(
-                                hintText: 'Write your new password',
+                                hintText: 'Write your Email',
                                 hintStyle: TextStyle(
                                     color: Color.fromARGB(255, 116, 116, 116)),
                                 border: InputBorder.none),
@@ -69,17 +69,20 @@ class forgot2 extends StatelessWidget {
                           alignment: AlignmentDirectional.centerEnd,
                           padding: EdgeInsets.symmetric(vertical: 25.0),
                           width: double.infinity,
-                          child: RaisedButton(
-                            elevation: 5.0,
-                            onPressed: () =>
-                                print('Change Password button Pressed'),
-                            padding: EdgeInsets.all(15.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 5.0,
+                              padding: EdgeInsets.all(15.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              primary: Colors.white,
                             ),
-                            color: Colors.white,
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/forgot2');
+                            },
                             child: Text(
-                              'Change Password',
+                              'Reset',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 5, 5, 5),
                                 letterSpacing: 1.5,

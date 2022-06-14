@@ -1,10 +1,18 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:myproject/services/firebase.dart';
+import 'package:myproject/services/authendication.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    TextEditingController email = TextEditingController();
+    TextEditingController password = TextEditingController();
+    TextEditingController name = TextEditingController();
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -55,6 +63,7 @@ class Signup extends StatelessWidget {
                                     offset: Offset(0, 10))
                               ]),
                           child: TextField(
+                            controller: email,
                             decoration: InputDecoration(
                                 hintText: 'Write your Email',
                                 hintStyle: TextStyle(
@@ -76,6 +85,7 @@ class Signup extends StatelessWidget {
                               ]),
                           child: TextField(
                             obscureText: true,
+                            controller: password,
                             decoration: InputDecoration(
                                 hintText: 'Write Your Password',
                                 hintStyle: TextStyle(
@@ -97,8 +107,9 @@ class Signup extends StatelessWidget {
                               ]),
                           child: TextField(
                             obscureText: true,
+                            controller: name,
                             decoration: InputDecoration(
-                                hintText: 'Confirm Your Password',
+                                hintText: 'Enter Your Name',
                                 hintStyle: TextStyle(
                                     color: Color.fromARGB(255, 116, 116, 116)),
                                 border: InputBorder.none),
@@ -111,14 +122,37 @@ class Signup extends StatelessWidget {
                           alignment: AlignmentDirectional.centerEnd,
                           padding: EdgeInsets.symmetric(vertical: 25.0),
                           width: double.infinity,
-                          child: RaisedButton(
-                            elevation: 5.0,
-                            onPressed: () => print('Reset Button Pressed'),
-                            padding: EdgeInsets.all(15.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 5.0,
+                              primary: Colors.white,
+                              padding: EdgeInsets.all(15.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
                             ),
-                            color: Colors.white,
+                            onPressed: () async {
+                              SharedPreferences pref =
+                                  await SharedPreferences.getInstance();
+
+                              Authendication auth = Authendication();
+                              auth
+                                  .signup(email.text, password.text)
+                                  .then((value) {
+                                pref.setString("uid", value.user!.uid);
+                                print('===============  ${value.user!.uid}');
+                                print('made account ');
+                                userSetup(email.text, password.text, name.text,
+                                    value.user!.uid);
+                              }).catchError((err) {
+                                print(err);
+                              });
+
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text('new account made'),
+                              ));
+                            },
                             child: Text(
                               'Sign Up',
                               style: TextStyle(

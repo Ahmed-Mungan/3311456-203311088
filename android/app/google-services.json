@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "235302280468",
+    "project_id": "spor-app-b12ff",
+    "storage_bucket": "spor-app-b12ff.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:235302280468:android:a6c55969e4390d35fbb601",
+        "android_client_info": {
+          "package_name": "com.example.myproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "235302280468-a3o86veqnnvtp8e9qg7qs6nd1nqs4pqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4nA_RDZb2ChMRWzUtJuviHSi254-9qhI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "235302280468-a3o86veqnnvtp8e9qg7qs6nd1nqs4pqp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

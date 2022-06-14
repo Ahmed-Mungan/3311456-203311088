@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 
-class forgot extends StatelessWidget {
+class forgot2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +21,10 @@ class forgot extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Forgot Password",
+                    "Forgot Password\nCreate New Password",
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 35,
+                      fontSize: 30,
                     ),
                   ),
                 ],
@@ -56,7 +56,7 @@ class forgot extends StatelessWidget {
                               ]),
                           child: TextField(
                             decoration: InputDecoration(
-                                hintText: 'Write your Email',
+                                hintText: 'Write your new password',
                                 hintStyle: TextStyle(
                                     color: Color.fromARGB(255, 116, 116, 116)),
                                 border: InputBorder.none),
@@ -69,18 +69,19 @@ class forgot extends StatelessWidget {
                           alignment: AlignmentDirectional.centerEnd,
                           padding: EdgeInsets.symmetric(vertical: 25.0),
                           width: double.infinity,
-                          child: RaisedButton(
-                            elevation: 5.0,
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/forgot2');
-                            },
-                            padding: EdgeInsets.all(15.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              elevation: 5.0,
+                              padding: EdgeInsets.all(15.0),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0),
+                              ),
+                              primary: Colors.white,
                             ),
-                            color: Colors.white,
+                            onPressed: () =>
+                                print('Change Password button Pressed'),
                             child: Text(
-                              'Reset',
+                              'Change Password',
                               style: TextStyle(
                                 color: Color.fromARGB(255, 5, 5, 5),
                                 letterSpacing: 1.5,

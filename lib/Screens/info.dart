@@ -2,7 +2,6 @@
 // Teacher, I made this just to get to the 10 pages mark honestly i really don't have anything to write
 // 100 Puan Isiyorum HOCAM Cok Calistigim icin
 import 'package:flutter/material.dart';
-import 'package:myproject/util';
 
 class Info extends StatelessWidget {
   @override

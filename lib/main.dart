@@ -1,33 +1,62 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:myproject/chest.dart';
-import 'package:myproject/setups.dart';
-import 'package:myproject/signup.dart';
-import 'package:myproject/squats.dart';
-import 'package:myproject/pullup.dart';
-import 'package:myproject/util';
-import 'forgot.dart';
-import 'mainpage.dart';
-import 'info.dart';
-import 'forgot2.dart';
+import 'package:myproject/Screens/chest.dart';
+import 'package:myproject/Screens/profile.dart';
+import 'package:myproject/Screens/chartpage.dart';
+import 'package:myproject/unused/food_page.dart';
+import 'package:myproject/services/authendication.dart';
+import 'package:myproject/Screens/setups.dart';
+import 'package:myproject/Screens/signup.dart';
+import 'package:myproject/Screens/squats.dart';
+import 'package:myproject/Screens/pullup.dart';
+import 'package:myproject/utilities';
+import 'package:myproject/viewmodel/user_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'Screens/forgot.dart';
+import 'Screens/mainpage.dart';
+import 'Screens/info.dart';
+import 'Screens/forgot2.dart';
+import 'Screens/buttons.dart';
+import 'Screens/usermodel.dart';
+import 'dosya.dart';
+import 'download.dart';
 
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    initialRoute: '/',
-    routes: {
-      '/': (context) => MyApp(),
-      '/nextPage': ((context) => forgot()),
-      '/mainpage': ((context) => mainpage()),
-      '/signuppage': ((context) => Signup()),
-      '/infopage': ((context) => Info()),
-      '/forgot2': ((context) => forgot2()),
-      '/chest': ((context) => chest()),
-      '/squats': ((context) => squats()),
-      '/setup': ((context) => setup()),
-      '/pullup': ((context) => pullup()),
-    },
+import 'package:fl_chart/fl_chart.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider<UserProvider>(
+        create: (_) => UserProvider(),
+      ),
+    ],
+    child: MaterialApp(
+      // home: FoodPage(),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MyApp(),
+        '/nextPage': ((context) => forgot()),
+        '/mainpage': ((context) => mainpage()),
+        '/signuppage': ((context) => Signup()),
+        '/infopage': ((context) => Info()),
+        '/forgot2': ((context) => forgot2()),
+        '/chest': ((context) => chest()),
+        '/squats': ((context) => squats()),
+        '/setup': ((context) => setup()),
+        '/pullup': ((context) => pullup()),
+        '/buttonpage': ((context) => buttonpage()),
+        '/UserPage': ((context) => UserPage()),
+        '/profile': ((context) => profile()),
+        '/FileOperationsScreen': ((context) => FileOperationsScreen()),
+        '/LineChartSample2': ((context) => LineChartSample2()),
+      },
+    ),
   ));
 }
 
@@ -37,6 +66,13 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  TextEditingController email = new TextEditingController();
+  TextEditingController pass = new TextEditingController();
+  List<String> getErrorMessage = [
+    '',
+    '                 your password or email is empty'
+  ];
+  int count = 0;
   createAlertDialogue(BuildContext context) {
     TextEditingController customeController = TextEditingController();
 
@@ -44,7 +80,7 @@ class _MyAppState extends State<MyApp> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("  Your NAme"),
+            title: Text("  Your Name"),
             content: TextField(
               controller: customeController,
             ),
@@ -66,12 +102,12 @@ class _MyAppState extends State<MyApp> {
       children: <Widget>[
         Text(
           'Email Address',
-          style: kLabelStyle,
+          style: labelStyle,
         ),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: boxStyle,
           height: 60.0,
           child: TextField(
             keyboardType: TextInputType.emailAddress,
@@ -87,8 +123,13 @@ class _MyAppState extends State<MyApp> {
                 color: Colors.white,
               ),
               hintText: 'Write your email here',
-              hintStyle: kHintTextStyle,
+              hintStyle:
+                  TextStyle(color: Colors.white54, fontFamily: 'OpenSans'),
             ),
+            controller: email,
+            onSubmitted: (index) {
+              print('Your E-mail -: ' + index.toString());
+            },
           ),
         ),
       ],
@@ -102,12 +143,12 @@ class _MyAppState extends State<MyApp> {
       children: <Widget>[
         Text(
           'Password',
-          style: kLabelStyle,
+          style: labelStyle,
         ),
         SizedBox(height: 10.0),
         Container(
           alignment: Alignment.centerLeft,
-          decoration: kBoxDecorationStyle,
+          decoration: boxStyle,
           height: 60.0,
           child: TextField(
             obscureText: true,
@@ -123,10 +164,25 @@ class _MyAppState extends State<MyApp> {
                 color: Colors.white,
               ),
               hintText: 'Write your Password here',
-              hintStyle: kHintTextStyle,
+              hintStyle:
+                  TextStyle(color: Colors.white54, fontFamily: 'OpenSans'),
             ),
+            controller: pass,
+            onSubmitted: (index) {
+              print('Your Password -: ' + index.toString());
+            },
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: Text(
+            getErrorMessage[count],
+            style: TextStyle(
+                fontSize: 15,
+                color: Color.fromARGB(255, 255, 255, 255),
+                fontWeight: FontWeight.bold),
+          ),
+        )
       ],
     );
   }
@@ -137,7 +193,7 @@ class _MyAppState extends State<MyApp> {
       child: TextButton(
         child: Text(
           'Forgot Password',
-          style: kLabelStyle,
+          style: labelStyle,
         ),
         // ignore: avoid_print
         onPressed: () {
@@ -168,7 +224,7 @@ class _MyAppState extends State<MyApp> {
           ),
           Text(
             'Remember Me',
-            style: kLabelStyle,
+            style: labelStyle,
           )
         ],
       ),
@@ -181,7 +237,7 @@ class _MyAppState extends State<MyApp> {
       child: TextButton(
         child: Text(
           'Info',
-          style: kLabelStyle,
+          style: labelStyle,
         ),
         // ignore: avoid_print
         onPressed: () {
@@ -191,20 +247,56 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
+  Widget _userPage(BuildContext context) {
+    return Container(
+      alignment: FractionalOffset.bottomCenter,
+      child: TextButton(
+        child: Text(
+          'userlist',
+          style: labelStyle,
+        ),
+        // ignore: avoid_print
+        onPressed: () {
+          Navigator.pushNamed(context, '/UserPage');
+        },
+      ),
+    );
+  }
+
   Widget _loginButtonn() {
+    Authendication _auth = Authendication();
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
-        onPressed: () {
-          Navigator.pushNamed(context, '/mainpage');
-        },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          elevation: 5.0,
+          primary: Color.fromARGB(255, 255, 224, 224),
+          padding: EdgeInsets.all(15.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
         ),
-        color: Colors.white,
+        onPressed: () async {
+          SharedPreferences pref = await SharedPreferences.getInstance();
+          _auth.loginWithEmailAndPassword(email.text, pass.text).then((value) {
+            print(value);
+            pref.setString("uid", value.user!.uid);
+
+            Navigator.pushNamed(context, '/mainpage',
+                arguments: value.user!.uid);
+          }).catchError((err) {
+            print(err);
+          });
+          // setState(() {
+          //   // if (email.text.isEmpty || pass.text.isEmpty) {
+          //   //   count = 1;
+          //   // } else {
+          //   //   count = 0;
+          //   //   Navigator.pushNamed(context, '/mainpage');
+          //   // }
+          // });
+        },
         child: Text(
           'Login',
           style: TextStyle(
@@ -223,16 +315,18 @@ class _MyAppState extends State<MyApp> {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0),
       width: double.infinity,
-      child: RaisedButton(
-        elevation: 5.0,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          elevation: 5.0,
+          padding: EdgeInsets.all(15.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          primary: Colors.white,
+        ),
         onPressed: () {
           Navigator.pushNamed(context, '/signuppage');
         },
-        padding: EdgeInsets.all(15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        color: Colors.white,
         child: Text(
           'Sign up',
           style: TextStyle(
@@ -243,6 +337,22 @@ class _MyAppState extends State<MyApp> {
             fontFamily: 'OpenSans',
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buttonPage() {
+    return Container(
+      alignment: FractionalOffset.bottomCenter,
+      child: TextButton(
+        child: Text(
+          'Buttons',
+          style: TextStyle(fontSize: 14, color: Colors.white),
+        ),
+        // ignore: avoid_print
+        onPressed: () {
+          Navigator.pushNamed(context, '/buttonpage');
+        },
       ),
     );
   }
@@ -268,12 +378,14 @@ class _MyAppState extends State<MyApp> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    //-------------------------//
                     //user photo
-
+                    //----------------------//
                     CircleAvatar(
                       radius: 50.0,
                       backgroundImage: AssetImage('images/default.jpg'),
                     ),
+                    //-------------------------//
                     Text(
                       'Sign in',
                       style: TextStyle(
@@ -297,6 +409,8 @@ class _MyAppState extends State<MyApp> {
                     _loginButtonn(),
                     _signUpbutton(),
                     _infoButton(context),
+                    _buttonPage(),
+                    _userPage(context),
                   ],
                 ),
               ),
