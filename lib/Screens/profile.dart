@@ -101,6 +101,16 @@ class _profileState extends State<profile> {
                                     child:
                                         Image.network('${s2[0]['image_url']}')),
                           ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          const Divider(
+                            height: 20,
+                            thickness: 5,
+                            indent: 20,
+                            endIndent: 0,
+                            color: Colors.black,
+                          ),
                           SizedBox(height: 20),
                           GestureDetector(
                             onTap: () async {
@@ -133,7 +143,7 @@ class _profileState extends State<profile> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Color.fromARGB(104, 20, 53, 216),
         title: Text(
           'Enter New Name',
           style: TextStyle(
@@ -160,7 +170,7 @@ class _profileState extends State<profile> {
           },
         ),
         actions: [
-          ElevatedButton(
+          OutlinedButton(
             onPressed: () async {
               await FirebaseFirestore.instance
                   .collection('Accounts')
@@ -177,7 +187,7 @@ class _profileState extends State<profile> {
               'Submit',
             ),
           ),
-          ElevatedButton(
+          OutlinedButton(
             onPressed: () {
               Navigator.of(context).pop();
             },

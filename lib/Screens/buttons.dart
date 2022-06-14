@@ -3,7 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:myproject/utilities';
 
-class buttonpage extends StatelessWidget {
+class buttonpage extends StatefulWidget {
+  @override
+  State<buttonpage> createState() => _buttonpageState();
+}
+
+class _buttonpageState extends State<buttonpage> {
+  double _currentSliderValue = 20;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,6 +130,24 @@ class buttonpage extends StatelessWidget {
                     },
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Slider(
+                value: _currentSliderValue,
+                max: 100,
+                divisions: 5,
+                label: _currentSliderValue.round().toString(),
+                onChanged: (double value) {
+                  setState(() {
+                    _currentSliderValue = value;
+                  });
+                },
+              ),
+              Text(
+                'How Cool Are You',
+                style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
               ),
             ],
           ),
