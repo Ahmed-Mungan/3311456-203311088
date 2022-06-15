@@ -11,6 +11,13 @@ class mainpage extends StatelessWidget {
 
     var size = MediaQuery.of(context).size;
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(items: [
+        BottomNavigationBarItem(
+          icon: Icon(Icons.abc),
+          label: "Test",
+        ),
+        BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Test")
+      ]),
       body: Stack(
         children: <Widget>[
           Container(
